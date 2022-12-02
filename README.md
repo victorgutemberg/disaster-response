@@ -13,3 +13,8 @@
 3. Run your web app: `python run.py`
 
 4. Click the `PREVIEW` button to open the homepage
+
+
+-----
+
+This code is a part of an exercise from the [Data Science Nanodegree](https://github.com/udacity/DSND_Term2) by Udacity
