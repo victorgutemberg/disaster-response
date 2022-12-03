@@ -73,7 +73,7 @@ def save_data(df, database_filepath):
     database_filepath path to the database file.
     '''
     engine = create_engine(f'sqlite:///{database_filepath}')
-    df.to_sql('messages_expanded', engine, index=False)  
+    df.to_sql('messages_expanded', engine, index=False, if_exists='replace')
 
 
 def main():
