@@ -1,4 +1,5 @@
-import sys
+import argparse
+from pathlib import Path
 
 import joblib
 import pandas as pd
@@ -80,32 +81,31 @@ def save_model(model, model_filepath):
 
 
 def main():
-    print(sys.argv)
-    if len(sys.argv) == 3:
-        database_filepath, model_filepath = sys.argv[1:]
-        print('Loading data...\n    DATABASE: {}'.format(database_filepath))
-        X, y, category_names = load_data(database_filepath)
-        X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        
-        print('Building model...')
-        model = build_model()
-        
-        print('Training model...')
-        model.fit(X_train, Y_train)
-        
-        print('Evaluating model...')
-        evaluate_model(model, X_test, Y_test, category_names)
+    parser = argparse.ArgumentParser('Process data')
+    parser.add_argument('database_filepath', type=Path, help='The path to the dataset file.')
+    parser.add_argument('model_filepath', type=Path, help='The path to the pickled trained model.')
+    args = parser.parse_args()
 
-        print('Saving model...\n    MODEL: {}'.format(model_filepath))
-        save_model(model, model_filepath)
+    database_filepath = args.database_filepath
+    model_filepath = args.model_filepath
 
-        print('Trained model saved!')
+    print('Loading data...\n    DATABASE: {}'.format(database_filepath))
+    X, y, category_names = load_data(database_filepath)
+    X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    print('Building model...')
+    model = build_model()
+    
+    print('Training model...')
+    model.fit(X_train, Y_train)
+    
+    print('Evaluating model...')
+    evaluate_model(model, X_test, Y_test, category_names)
 
-    else:
-        print('Please provide the filepath of the disaster messages database '\
-              'as the first argument and the filepath of the pickle file to '\
-              'save the model to as the second argument. \n\nExample: python '\
-              'train_classifier.py ../data/DisasterResponse.db classifier.pkl')
+    print('Saving model...\n    MODEL: {}'.format(model_filepath))
+    save_model(model, model_filepath)
+
+    print('Trained model saved!')
 
 
 if __name__ == '__main__':
