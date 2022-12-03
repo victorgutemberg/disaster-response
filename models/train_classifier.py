@@ -57,6 +57,9 @@ def tokenize(text):
     Output:
     tokens a list of tokens after breaking the input text.
     '''
+    # case normalization
+    text = text.lower()
+
     # break text in tokens
     tokens = word_tokenize(text)
 
