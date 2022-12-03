@@ -4,6 +4,7 @@ from pathlib import Path
 import joblib
 import pandas as pd
 
+from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 from sklearn.ensemble import RandomForestClassifier
@@ -62,6 +63,10 @@ def tokenize(text):
 
     # break text in tokens
     tokens = word_tokenize(text)
+
+    # remove stop words
+    stop_words = stopwords.words('english')
+    tokens = [token for token in tokens if token not in stop_words]
 
     # lemmatize the tokens
     lemmatizer = WordNetLemmatizer()
