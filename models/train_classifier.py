@@ -18,6 +18,18 @@ from constants import TABLE_NAME
 
 
 def load_data(database_filepath):
+    '''
+    Load data
+    Load the data stored in a Sqlite database.
+    
+    Input:
+    database_filepath path to the database file.
+
+    Output:
+    X messages numpy matrix.
+    y categories numpy matrix.
+    categories list of category names.
+    '''
     # load data from database
     print(f'sqlite:///{database_filepath}')
     engine = create_engine(f'sqlite:///{database_filepath}')
@@ -35,6 +47,16 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    '''
+    Tokenize
+    Tonekize text by word and lemmatize each token.
+
+    Input:
+    text a sentence to be tokenized.
+
+    Output:
+    tokens a list of tokens after breaking the input text.
+    '''
     # break text in tokens
     tokens = word_tokenize(text)
 
@@ -46,6 +68,13 @@ def tokenize(text):
 
 
 def build_model():
+    '''
+    build_model
+    Defines the model to classify the messages.
+
+    Ouput:
+    cv GridSearch with a model and parameters preset.
+    '''
     estimator = RandomForestClassifier()
 
     pipeline = Pipeline((
@@ -67,6 +96,17 @@ def build_model():
 
 
 def evaluate_model(model, X_test, y_test, category_names):
+    '''
+    evaluate_model
+    Evaluate model
+    Prints the f1-score, precision and recall for each of the categories.
+
+    Input:
+    model the model to be tested.
+    X_test the test data input.
+    y_test the test data labels.
+    category_names the list of possible category names.
+    '''
     y_pred = model.predict(X_test)
 
     for column_number, column_name in enumerate(category_names):
@@ -77,12 +117,20 @@ def evaluate_model(model, X_test, y_test, category_names):
 
 
 def save_model(model, model_filepath):
+    '''
+    save_model
+    Save the model to a pickled file.
+
+    Input:
+    model the model to be saved.
+    model_filepath the path to the pickled trained model.
+    '''
     joblib.dump(model, model_filepath)
 
 
 def main():
     parser = argparse.ArgumentParser('Process data')
-    parser.add_argument('database_filepath', type=Path, help='The path to the dataset file.')
+    parser.add_argument('database_filepath', type=Path, help='The path to the database file.')
     parser.add_argument('model_filepath', type=Path, help='The path to the pickled trained model.')
     args = parser.parse_args()
 

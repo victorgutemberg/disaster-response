@@ -6,6 +6,17 @@ from sqlalchemy import create_engine
 
 
 def load_data(messages_filepath, categories_filepath):
+    '''
+    load_data
+    Load data from the messages and categories csv files and merge them to a single dataframe.
+
+    Input:
+    messages_filepath path to the messages CSV file.
+    categories_filepath path to the categories CSV file.
+
+    Output:
+    df merged dataframe containing messages and categories.
+    '''
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
 
@@ -13,6 +24,16 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    '''
+    clean_data
+    Convert categories values from string to int and drop duplicates.
+
+    Input:
+    df dataframe containing messages and categories.
+
+    Output:
+    df dataframe after cleaning.
+    '''
     # create a dataframe of the 36 individual category columns
     categories = df['categories'].str.split(';', expand=True)
 
@@ -42,8 +63,16 @@ def clean_data(df):
 
     return df
 
-def save_data(df, database_filename):
-    engine = create_engine(f'sqlite:///{database_filename}')
+def save_data(df, database_filepath):
+    '''
+    save_data
+    Saves a dataframe to a Sqlite file.
+
+    Input:
+    df dataframe to be saved.
+    database_filepath path to the database file.
+    '''
+    engine = create_engine(f'sqlite:///{database_filepath}')
     df.to_sql('messages_expanded', engine, index=False)  
 
 
@@ -51,7 +80,7 @@ def main():
     parser = argparse.ArgumentParser('Process data')
     parser.add_argument('messages_filepath', type=Path, help='The path to the messages CSV file.')
     parser.add_argument('categories_filepath', type=Path, help='The path to the categories CSV file.')
-    parser.add_argument('database_filepath', type=Path, help='The path to the dataset file.')
+    parser.add_argument('database_filepath', type=Path, help='The path to the database file.')
     args = parser.parse_args()
 
     messages_filepath = args.messages_filepath
