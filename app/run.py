@@ -35,13 +35,17 @@ def tokenize(text):
 @app.route('/index')
 def index():
     
-    # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
+    # get messages grouped by genre
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
+
+    # get the top n categories most used
+    n_categories = 10
+    categories = df.drop(['id', 'message', 'original', 'genre'], axis=1)
+    top_categories = categories.sum().sort_values(ascending=False).head(n_categories)
+    category_names = [category.replace('_', ' ').title() for category in top_categories.index]
     
     # create visuals
-    # TODO: Below is an example - modify to create your own visuals
     graphs = [
         {
             'data': [
@@ -50,7 +54,6 @@ def index():
                     y=genre_counts
                 )
             ],
-
             'layout': {
                 'title': 'Distribution of Message Genres',
                 'yaxis': {
@@ -58,6 +61,23 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=category_names,
+                    y=top_categories
+                ),
+            ],
+            'layout': {
+                'title': f'Top {n_categories} Most Frequent Categories',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Category"
                 }
             }
         }
