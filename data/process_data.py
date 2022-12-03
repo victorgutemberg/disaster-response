@@ -34,8 +34,11 @@ def clean_data(df):
     Output:
     df dataframe after cleaning.
     '''
+
+    print(f'Number of rows before cleaning: {df.shape[0]}')
+
     # create a dataframe of the 36 individual category columns
-    categories = df['categories'].str.split(';', expand=True)
+    categories = df['categories'].str.split(';', expand=True) # type: pd.DataFrame
 
     # select the first row of the categories dataframe
     row = categories.iloc[0]
@@ -47,11 +50,17 @@ def clean_data(df):
 
     categories.columns = category_colnames
 
-    # convert to integer
-    categories = categories.apply(lambda column: column.str[-1:]).astype(int)
+    # drop nan values
+    categories = categories.dropna(how='any')
 
-    # filter values different than one or zero and convert to boolean
-    categories = categories[(categories <= 1).all(1)].astype(bool)
+    # convert to integer
+    categories = categories.astype(str)
+    categories = categories.apply(lambda column: column.str[-1:])
+
+    # filter values different than one or zero
+    filtered_rows = ((categories == '1') | (categories == '0')).all(1)
+    df = df[filtered_rows]
+    categories = categories[filtered_rows].astype(bool)
 
     # drop the original categories column from `df`
     df = df.drop('categories', axis=1)
@@ -62,6 +71,8 @@ def clean_data(df):
     # drop duplicates
     print('Number of duplicates dropped:', df.duplicated().sum())
     df = df.drop_duplicates()
+
+    print(f'Number of rows after cleaning: {df.shape[0]}')
 
     return df
 
