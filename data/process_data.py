@@ -48,8 +48,10 @@ def clean_data(df):
     categories.columns = category_colnames
 
     # convert to integer
-    categories = categories.astype(str)
     categories = categories.apply(lambda column: column.str[-1:]).astype(int)
+
+    # filter values different than one or zero and convert to boolean
+    categories = categories[(categories <= 1).all(1)].astype(bool)
 
     # drop the original categories column from `df`
     df = df.drop('categories', axis=1)
