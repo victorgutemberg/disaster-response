@@ -49,9 +49,9 @@ def save_data(df, database_filename):
 
 def main():
     parser = argparse.ArgumentParser('Process data')
-    parser.add_argument('messages_filepath', type=Path)
-    parser.add_argument('categories_filepath', type=Path)
-    parser.add_argument('database_filepath', type=Path)
+    parser.add_argument('messages_filepath', type=Path, help='The path to the messages CSV file.')
+    parser.add_argument('categories_filepath', type=Path, help='The path to the categories CSV file.')
+    parser.add_argument('database_filepath', type=Path, help='The path to the dataset file.')
     args = parser.parse_args()
 
     messages_filepath = args.messages_filepath
