@@ -3,6 +3,8 @@
 ## Introduction
 During the event of a disaster, a quick response is crutial for lives to be saved. Social media platforms can be a good tool in this situation since they can give almost direct access to the problems people are facing. The problem with this news source is that there is a high number of messages that might be unrelated to the current disaster. Even given that the message is related to the event, they might still be part of different categories, and routing them to the appropriate emergency service is important for an effective response.
 
+![image](https://user-images.githubusercontent.com/3620840/205431388-c08abe1c-3d9a-4ff6-8c04-1a890d1628ad.png)
+
 This project offers a solution to classify text messages according to a set of categories. The first category `related` specifies if the message is related to a disaster.
 
 |Category Name|
@@ -60,6 +62,7 @@ This project offers a solution to classify text messages according to a set of c
   - train_classifier.py: Trains a classifier and save a pickled model.
   - classifier.pkl: saved model.
 * README.md
+
 
 ## Instructions
 1. Run the following commands in the project's root directory to set up your database and model.
