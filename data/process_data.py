@@ -60,7 +60,7 @@ def clean_data(df):
     # filter values different than one or zero
     filtered_rows = ((categories == '1') | (categories == '0')).all(1)
     df = df[filtered_rows]
-    categories = categories[filtered_rows].astype(bool)
+    categories = categories[filtered_rows].astype(int).astype(bool)
 
     # drop the original categories column from `df`
     df = df.drop('categories', axis=1)
