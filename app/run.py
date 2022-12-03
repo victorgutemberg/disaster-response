@@ -1,4 +1,8 @@
+import argparse
 import json
+from pathlib import Path
+
+
 import plotly
 import pandas as pd
 
@@ -24,13 +28,6 @@ def tokenize(text):
         clean_tokens.append(clean_tok)
 
     return clean_tokens
-
-# load data
-engine = create_engine('sqlite:///../data/DisasterResponse.db')
-df = pd.read_sql_table('messages_expanded', engine)
-
-# load model
-model = joblib.load("../models/classifier.pkl")
 
 
 # index webpage displays cool visuals and receives user input text for model
@@ -92,9 +89,20 @@ def go():
     )
 
 
-def main():
-    app.run(host='0.0.0.0', port=3000, debug=True)
-
-
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser('Process data')
+    parser.add_argument('database_filepath', type=Path, help='The path to the database file.')
+    parser.add_argument('model_filepath', type=Path, help='The path to the pickled trained model.')
+    args = parser.parse_args()
+
+    database_filepath = args.database_filepath
+    model_filepath = args.model_filepath
+
+    # load data
+    engine = create_engine(f'sqlite:///{database_filepath}')
+    df = pd.read_sql_table('messages_expanded', engine)
+
+    # load model
+    model = joblib.load(model_filepath)
+
+    app.run(host='0.0.0.0', port=3000, debug=True)
